@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening and Typing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            color: #333;
+        }
+        .logo {
+            width: 100px;
+            margin-top: 20px;
+        }
+        .input-container {
+            margin: 20px;
+        }
+        .input-box {
+            padding: 10px;
+            font-size: 20px;
+            width: 200px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .play-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .play-button:hover {
+            background-color: #0056b3;
+        }
+        .more-lessons-btn {
+            margin-top: 40px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .more-lessons-btn:hover {
+            background-color: #218838;
+        }
+        .instructions {
+            font-size: 16px;
+            margin: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Logo -->
+<img src="https://i.imgur.com/mwpTHJj.png" class="logo" alt="Logo">
+
+<h1>Listening and Typing</h1>
+
+<!-- Instructions -->
+<div class="instructions">
+    <p>Click the Play button to hear the word and type it in the box below.</p>
+</div>
+
+<!-- Input box -->
+<div class="input-container">
+    <input type="text" id="userInput" class="input-box" placeholder="Type here" />
+    <button class="play-button" onclick="speakCurrentWord()">Play</button>
+    <button onclick="checkAnswer()">Submit</button>
+</div>
+
+<!-- Feedback message -->
+<div class="feedback" id="feedbackMessage"></div>
+
+<!-- "More Lessons" button -->
+<a href="https://sites.google.com/view/grades-1/home" class="more-lessons-btn">More Lessons</a>
+
+<!-- JavaScript -->
+<script>
+    const userInput = document.getElementById('userInput');
+    const feedbackMessage = document.getElementById('feedbackMessage');
+
+    // Pre-defined words (10 words)
+    const words = ["cat", "dog", "sun", "tree", "hat", "fish", "bird", "ball", "car", "book"];
+    let currentWordIndex = 0;
+
+    // Function to setup a new word for listening and typing
+    function setupExercise() {
+        feedbackMessage.innerText = '';
+        userInput.value = '';
+
+        if (currentWordIndex < words.length) {
+            userInput.disabled = false; // Enable input for the new word
+        } else {
+            feedbackMessage.innerText = "Congratulations! You've completed all the words.";
+            userInput.style.display = 'none'; // Hide input box after completion
+        }
+    }
+
+    // Function to convert text to speech
+    function speakCurrentWord() {
+        const currentWord = words[currentWordIndex];
+        const speech = new SpeechSynthesisUtterance(currentWord);
+        window.speechSynthesis.speak(speech);
+    }
+
+    // Function to check the user's answer
+    function checkAnswer() {
+        const userAnswer = userInput.value.trim().toLowerCase();
+        const correctAnswer = words[currentWordIndex];
+
+        if (userAnswer === correctAnswer) {
+            feedbackMessage.innerText = "Correct! Well done.";
+            feedbackMessage.style.color = "green";
+            currentWordIndex++; // Move to the next word
+            setTimeout(() => {
+                setupExercise();
+            }, 2000); // Setup the next exercise after 2 seconds
+        } else {
+            feedbackMessage.innerText = `Incorrect! The right word was "${correctAnswer}". Try again.`;
+            feedbackMessage.style.color = "red";
+        }
+    }
+
+    // Start the exercise
+    setupExercise();
+</script>
+
+</body>
+</html>
